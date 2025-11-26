@@ -1,0 +1,101 @@
+[
+  {
+    "page_number": 1,
+    "text": "Test PDF Document\nThis is a test PDF document created to test the PDF extractor functionality. It contains multiple types of\ncontent including regular text, tables with various structures, and images with text that can be extracted\nusing OCR.\nTable 1: Simple Data Table\nProduct Price Quantity Total\nLaptop $999 2 $1998\nMouse $25 5 $125\nKeyboard $75 3 $225\nMonitor $350 2 $700\nTable 2: Complex Table with Merged Cells\nCategory Q1 Q2 Q3 Q4\nSales 1000 1200 1500 1800\nExpenses 800 900 1000 1100\nProfit 200 300 500 700\nImages Section\nBelow are test images with text for OCR testing:",
+    "tables": [
+      {
+        "table_id": "table_p1_t1",
+        "structure": {
+          "rows": [
+            [
+              "Product",
+              "Price",
+              "Quantity",
+              "Total"
+            ],
+            [
+              "Laptop",
+              "$999",
+              "2",
+              "$1998"
+            ],
+            [
+              "Mouse",
+              "$25",
+              "5",
+              "$125"
+            ],
+            [
+              "Keyboard",
+              "$75",
+              "3",
+              "$225"
+            ],
+            [
+              "Monitor",
+              "$350",
+              "2",
+              "$700"
+            ]
+          ],
+          "merged_cells": []
+        }
+      },
+      {
+        "table_id": "table_p1_t2",
+        "structure": {
+          "rows": [
+            [
+              "Category",
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            [
+              "Sales",
+              "1000",
+              "1200",
+              "1500",
+              "1800"
+            ],
+            [
+              "Expenses",
+              "800",
+              "900",
+              "1000",
+              "1100"
+            ],
+            [
+              "Profit",
+              "200",
+              "300",
+              "500",
+              "700"
+            ]
+          ],
+          "merged_cells": []
+        }
+      }
+    ],
+    "images": [
+      {
+        "image_id": "image_p1_i1",
+        "description": "Image 1: A medium color wide/landscape image (300x100 pixels, PNG format)",
+        "ocr_text": null
+      }
+    ]
+  },
+  {
+    "page_number": 2,
+    "text": "This document demonstrates various content types that the PDF extractor should be able to handle.\nThe extractor should successfully identify and extract: - Regular text paragraphs - Tables with different\nstructures - Images with embedded text (requires OCR)",
+    "tables": [],
+    "images": [
+      {
+        "image_id": "image_p2_i1",
+        "description": "Image 1: A medium color wide/landscape image (300x100 pixels, PNG format)",
+        "ocr_text": null
+      }
+    ]
+  }
+]
