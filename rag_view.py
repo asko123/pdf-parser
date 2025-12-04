@@ -85,4 +85,43 @@ def parse_pdf_with_gemini(
         doc["rag"] = build_rag_view(pages, pdf_path)
 
     return doc
+def main() -> None:
+    logging.basicConfig(level=logging.INFO)
 
+    parser = argparse.ArgumentParser(
+        description="Parse PDF text, tables, and images using gemini-2.5-pro-vision via GS AI."
+    )
+    parser.add_argument("pdf_path", help="Path to the PDF file to parse.")
+    parser.add_argument(
+        "--max-pages",
+        type=int,
+        default=None,
+        help="Optional limit on number of pages to process.",
+    )
+    parser.add_argument(
+        "--for-rag",
+        action="store_true",
+        help="Include RAG-friendly 'raw_text' and 'tables' in the output.",
+    )
+
+    args = parser.parse_args()
+
+    doc_result = parse_pdf_with_gemini(
+        pdf_path=args.pdf_path,
+        max_pages=args.max_pages,
+        for_rag=args.for_rag,
+    )
+
+    if args.for_rag and "rag" in doc_result:
+        print("\n=== RAG RAW TEXT ===\n")
+        print(doc_result["rag"]["raw_text"])
+        print("\n=== RAG TABLES JSON ===\n")
+        print(json.dumps(doc_result["rag"]["tables"], indent=2))
+        print("\n=== FULL PARSED DOCUMENT (for debugging) ===\n")
+        pprint(doc_result)
+    else:
+        pprint(doc_result)
+
+
+if __name__ == "__main__":
+    main()
