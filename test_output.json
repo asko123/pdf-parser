@@ -99,3 +99,44 @@
     ]
   }
 ]
+
+messages = [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "input_text",
+                    "text": user_prompt.strip(),
+                },
+                {
+                    "type": "input_image",
+                    "image_url": {
+                        # OpenAI-style data URL for an inline image
+                        "url": f"data:image/png;base64,{img_b64}"
+                    },
+                },
+            ],
+        }
+    ]
+
+    resp = client.chat.completions.create(
+        model=VISION_MODEL,
+        messages=messages,
+        temperature=0.0,  # deterministic; better for parsing
+    )
+
+    # The actual JSON is returned as the assistant message content string
+    content_str: str = resp.choices[0].message.content
+
+    # Parse the JSON before returning so callers get a Python dict
+    try:
+        parsed: Dict[str, Any] = json.loads(content_str)
+    except json.JSONDecodeError:
+        # If the model misbehaves, log and wrap the raw content
+        logging.error("Model returned non-JSON content on page %s", page_number)
+        parsed = {
+            "page_number": page_number,
+            "raw_content": content_str,
+        }
+
+    return parsed
