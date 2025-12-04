@@ -47,3 +47,42 @@ def build_rag_view(
         "raw_text": raw_text,
         "tables": tables_for_rag,
     }
+
+def parse_pdf_with_gemini(
+    pdf_path: str,
+    max_pages: Optional[int] = None,
+    for_rag: bool = False,
+) -> Dict[str, Any]:
+    """
+    Parse a PDF into structured JSON using gemini-2.5-pro-vision.
+
+    If for_rag=True, also include a 'rag' section with:
+      - rag["raw_text"]
+      - rag["tables"]
+    """
+    client = make_client()
+    page_images = pdf_to_images(pdf_path)
+
+    if max_pages is None:
+        max_pages = len(page_images)
+    max_pages = min(max_pages, len(page_images))
+
+    pages: List[Dict[str, Any]] = []
+
+    for idx in range(max_pages):
+        page_num = idx + 1
+        logging.info("Parsing page %s/%s", page_num, max_pages)
+        page_img = page_images[idx]
+        page_result = parse_page_with_gemini(client, page_img, page_num)
+        pages.append(page_result)
+
+    doc: Dict[str, Any] = {
+        "document_path": pdf_path,
+        "pages": pages,
+    }
+
+    if for_rag:
+        doc["rag"] = build_rag_view(pages, pdf_path)
+
+    return doc
+
